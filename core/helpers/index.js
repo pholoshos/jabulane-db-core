@@ -64,26 +64,27 @@ class DatabaseHelper {
 
   // Function to check if a duplicate entry exists in a collection
   isDuplicateEntry(collectionName, newData, uniqueIdField = "id") {
-    const database = this.readEncryptedDatabase();
-    const collection = database.root[collectionName];
+    return false;
+    // const database = this.readEncryptedDatabase();
+    // const collection = database.root[collectionName];
 
-    if (collection) {
-      // Check if any existing entry matches the new data
-      return collection.some((existingData) => {
-        // Check for duplicates by comparing all fields except the unique identifier
-        if (existingData[uniqueIdField] === newData[uniqueIdField]) {
-          // Skip comparison for the unique identifier
-          return false;
-        }
+    // if (collection) {
+    //   // Check if any existing entry matches the new data
+    //   return collection.some((existingData) => {
+    //     // Check for duplicates by comparing all fields except the unique identifier
+    //     if (existingData[uniqueIdField] === newData[uniqueIdField]) {
+    //       // Skip comparison for the unique identifier
+    //       return false;
+    //     }
 
-        // Check for duplicates by comparing other fields
-        return Object.keys(existingData).every((key) => {
-          return key === uniqueIdField || existingData[key] === newData[key];
-        });
-      });
-    } else {
-      return false;
-    }
+    //     // Check for duplicates by comparing other fields
+    //     return Object.keys(existingData).every((key) => {
+    //       return key === uniqueIdField || existingData[key] === newData[key];
+    //     });
+    //   });
+    // } else {
+    //   return false;
+    // }
   }
 
   addDataToCollection(collectionName, newData) {

@@ -17,7 +17,7 @@ const auth = (req, res, next) => {
 
 const generateAccessToken = (user = { username: "admin" }) => {
   const secretKey = process.env.secret_key;
-  return jwt.sign(user, secretKey, { expiresIn: "1h" });
+  return jwt.sign(user, secretKey, { expiresIn: "1y" });
 };
 
 module.exports = {auth, generateAccessToken};

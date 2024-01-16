@@ -1,7 +1,7 @@
 // mainRouter.js
 const express = require("express");
-const DatabaseHelper = require("./helpers");
-const ConfigDatabaseHelper = require("./config");
+const DatabaseHelper = require("../helpers/index");
+const ConfigDatabaseHelper = require("../configs/index");
 
 const router = express.Router();
 const DATABASE_FILE = "database.jbb";

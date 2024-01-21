@@ -36,7 +36,8 @@ const jabulaneDB = (port = 0) => {
     // Specify the URL you want to open
     const urlToOpen = `http://localhost:3003/landing/${port}/${token}`;
     
-    exec(`open ${urlToOpen}`, (error, stdout, stderr) => {
+    
+    (`open ${urlToOpen}`, (error, stdout, stderr) => {
       if (error) {
         console.error(`Error opening ${urlToOpen}: ${error.message}`);
         return;

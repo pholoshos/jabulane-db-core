@@ -5,7 +5,7 @@
 ## JabulaneDB Portal
 Jabulane DB provides a user-friendly portal for seamlessly viewing and manipulating your data, offering a streamlined experience to efficiently manage and interact with your information.
 
-![Alt text](/portal/client/jabdb.png)
+![portal](/portal/client/screen.png)
 
 ## Installation
 To use Jabulane DB in your project, you need to install the `jabulane-db-core` package. Open your terminal and run the following command:

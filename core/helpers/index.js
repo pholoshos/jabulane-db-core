@@ -103,7 +103,7 @@ class DatabaseHelper {
     newData = {
       ...newData,
       id: this.generateUniqueId(),
-      time_stamp :new Date().toLocaleString(),
+      time_stamp_create: new Date().toLocaleString(),
     };
 
     db.root[collectionName].push(newData);
@@ -140,7 +140,11 @@ class DatabaseHelper {
           throw new Error(`Duplicate entry for name`);
         }
 
-        collection[index] = { ...collection[index], ...newData };
+        collection[index] = {
+          ...collection[index],
+          ...newData,
+          time_stamp_update: new Date().toLocaleString(),
+        };
         this.writeEncryptedDatabase(db);
         return true;
       }

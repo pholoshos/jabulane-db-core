@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const { generateAccessToken, auth } = require("./utils/auth");
+const { generateAccessToken, auth } = require("./utils/auth.cjs");
 const path = require("path");
 const { exec } = require('child_process');
 
@@ -21,7 +21,9 @@ app.get("/portal", (req, res) => {
   res.sendFile(path.join(__dirname, "portal", "index.html"));
 });
 
-const jabDBRoute = require("./core/actions/index");
+const jabDBRoute = require("./core/actions/index.cjs");
+import('./portal/index.js')
+
 app.use("/", auth, jabDBRoute);
 
 const jabulaneDB = (port = 0) => {
@@ -32,8 +34,8 @@ const jabulaneDB = (port = 0) => {
       `Jabulane-db: Database is running on port ${port}. access it on key is ${token}`
     );
     // Specify the URL you want to open
-    const urlToOpen = `http://localhost:5175/landing/${port}/${token}`;
-
+    const urlToOpen = `http://localhost:3003/landing/${port}/${token}`;
+    
     exec(`open ${urlToOpen}`, (error, stdout, stderr) => {
       if (error) {
         console.error(`Error opening ${urlToOpen}: ${error.message}`);

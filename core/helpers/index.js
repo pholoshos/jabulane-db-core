@@ -100,7 +100,11 @@ class DatabaseHelper {
     }
 
     // Generate a unique ID and add it to the data
-    newData.id = this.generateUniqueId();
+    newData = {
+      ...newData,
+      id: this.generateUniqueId(),
+      time_stamp :new Date().toLocaleString(),
+    };
 
     db.root[collectionName].push(newData);
     this.writeEncryptedDatabase(db);
@@ -148,25 +152,27 @@ class DatabaseHelper {
   searchEntityByField(collectionName, fieldName, searchValue) {
     const database = this.readEncryptedDatabase();
     const collection = database.root[collectionName];
-  
+
     if (collection) {
-      const matchingEntities = collection.filter(item => {
+      const matchingEntities = collection.filter((item) => {
         // Check if any field matches the search value
         for (const key in item) {
-          if (item.hasOwnProperty(key) && typeof item[key] === 'string' && item[key].includes(searchValue)) {
+          if (
+            item.hasOwnProperty(key) &&
+            typeof item[key] === "string" &&
+            item[key].includes(searchValue)
+          ) {
             return true;
           }
         }
         return false;
       });
-  
+
       return matchingEntities;
     } else {
       return null; // Collection not found
     }
   }
-
-  
 
   generateUniqueId() {
     return Date.now().toString(36) + Math.random().toString(36).substr(2);

@@ -2,6 +2,9 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const { generateAccessToken, auth } = require("./utils/auth");
+const path = require("path");
+const { exec } = require('child_process');
 
 const corsOptions = {
   origin: "*",
@@ -10,16 +13,34 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
+// Serve static files from the 'portal' directory
+app.use(express.static(path.join(__dirname, "portal")));
+
+// Handle all routes by serving the 'index.html' file
+app.get("/portal", (req, res) => {
+  res.sendFile(path.join(__dirname, "portal", "index.html"));
+});
+
 const jabDBRoute = require("./core/actions/index");
-const { generateAccessToken, auth } = require("./utils/auth");
 app.use("/", auth, jabDBRoute);
 
 const jabulaneDB = (port = 0) => {
   const server = app.listen(port, () => {
     const { port } = server.address();
+    const token = generateAccessToken();
     console.log(
-      `Jabulane-db: Database is running on port ${port}. access it on key is ${generateAccessToken()}`
+      `Jabulane-db: Database is running on port ${port}. access it on key is ${token}`
     );
+    // Specify the URL you want to open
+    const urlToOpen = `http://localhost:5175/landing/${port}/${token}`;
+
+    exec(`open ${urlToOpen}`, (error, stdout, stderr) => {
+      if (error) {
+        console.error(`Error opening ${urlToOpen}: ${error.message}`);
+        return;
+      }
+      console.log(`Opened ${urlToOpen} in the default web browser`);
+    });
   });
 
   return server;

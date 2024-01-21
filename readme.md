@@ -2,8 +2,12 @@
 
 [Jabulane DB](https://www.npmjs.com/package/jabulane-db-core) is a lightweight and fast database solution designed for quick and easy integration into your Node.js applications. This readme provides a step-by-step guide on the fastest way to get Jabulane DB up and running using the `jabulane-db-core` package.
 
-## Installation
+## JabulaneDB Portal
+Jabulane DB provides a user-friendly portal for seamlessly viewing and manipulating your data, offering a streamlined experience to efficiently manage and interact with your information.
 
+<img src="./portal/client/screen.png" alt="Alt text"  width="100%">
+
+## Installation
 To use Jabulane DB in your project, you need to install the `jabulane-db-core` package. Open your terminal and run the following command:
 
 ```bash

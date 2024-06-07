@@ -6,10 +6,18 @@ const ConfigDatabaseHelper = require("../configs//index.cjs");
 const router = express.Router();
 const DATABASE_FILE = "database.jbb";
 const CONFIG_FILE = "configDatabase.jbb";
-const ENCRYPTION_KEY = "your-secret-key";
 
-const dbHelper = new DatabaseHelper(DATABASE_FILE, ENCRYPTION_KEY);
-const configDbHelper = new ConfigDatabaseHelper(CONFIG_FILE, ENCRYPTION_KEY);
+const DATABASE_ENCRYPTION = {
+  algorithm: "aes-256-cbc",
+  iv: "6db55d5b026ef1b78341cb541d9804f0",
+  password: "Password used to generate key",
+};
+
+const dbHelper = new DatabaseHelper(DATABASE_FILE, DATABASE_ENCRYPTION);
+const configDbHelper = new ConfigDatabaseHelper(
+  CONFIG_FILE,
+  DATABASE_ENCRYPTION
+);
 
 // Middleware to check user roles
 function checkUserRole(req, res, next) {

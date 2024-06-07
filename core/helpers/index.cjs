@@ -1,20 +1,25 @@
 // helpers.js
 const fs = require("fs");
-const crypto = require("crypto");
+const { scryptSync, createDecipheriv, createCipheriv } = require("node:crypto");
 
 class DatabaseHelper {
-  constructor(fileName, encryptionKey) {
+  constructor(fileName, DATABASE_ENCRYPTION) {
+    const { algorithm, iv, password } = DATABASE_ENCRYPTION;
     this.fileName = fileName;
-    this.encryptionKey = encryptionKey;
+    this.algorithm = algorithm;
+    this.iv = iv;
+    this.password = password;
   }
 
   readEncryptedDatabase() {
     try {
-      const encryptedData = fs.readFileSync(this.fileName, "utf8");
-      const decipher = crypto.createDecipher("aes-256-cbc", this.encryptionKey);
-      let decryptedData = decipher.update(encryptedData, "hex", "utf8");
-      decryptedData += decipher.final("utf8");
-      return JSON.parse(decryptedData);
+      const data = fs.readFileSync(this.fileName, "utf8");
+      const initVector = Buffer.from(this.iv, "hex");
+      const key = scryptSync(this.password, "salt", 32);
+      const decipher = createDecipheriv(this.algorithm, key, initVector);
+      let decrypted = decipher.update(data, "hex", "utf8");
+      decrypted += decipher.final("utf8");
+      return JSON.parse(decrypted);
     } catch (error) {
       console.error(error);
       return { root: {} };
@@ -56,10 +61,12 @@ class DatabaseHelper {
   }
 
   writeEncryptedDatabase(data) {
-    const cipher = crypto.createCipher("aes-256-cbc", this.encryptionKey);
-    let encryptedData = cipher.update(JSON.stringify(data), "utf8", "hex");
-    encryptedData += cipher.final("hex");
-    fs.writeFileSync(this.fileName, encryptedData);
+    const initVector = Buffer.from(this.iv, "hex");
+    const key = scryptSync(this.password, "salt", 32);
+    const cipher = createCipheriv(this.algorithm, key, initVector);
+    let encrypted = cipher.update(JSON.stringify(data), "utf8", "hex");
+    encrypted += cipher.final("hex");
+    fs.writeFileSync(this.fileName, encrypted);
   }
 
   // Function to check if a duplicate entry exists in a collection
